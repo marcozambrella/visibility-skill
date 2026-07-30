@@ -357,12 +357,81 @@ td:last-child, th:last-child { padding-right: 0; }
   background: var(--surface);
   border: 1px solid var(--rule);
   color: var(--ink);
-  margin-top: 1.75rem;
-  max-width: 56ch;
 }
 .term .sev-err { color: var(--brass-txt); font-weight: 600; }
 .term .sev-warn { color: var(--muted); }
 .term .dim { color: var(--muted); }
+.term .ok { color: var(--brass-txt); }
+
+/* ── Worked examples ───────────────────────────────────────────────── */
+
+.worked { counter-increment: worked; padding-top: 2.75rem; }
+.worked + .worked { margin-top: 3.5rem; border-top: 1px solid var(--rule); }
+
+.worked-head { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: 0 0.75rem; }
+.worked-head::before {
+  content: counter(worked);
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brass-txt);
+  padding-top: 0.3rem;
+}
+.worked-head h3 { font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.625rem); letter-spacing: -0.016em; }
+.worked-head p { grid-column: 2; margin: 0.5rem 0 0; color: var(--muted); max-width: 62ch; }
+
+.worked-body { margin-top: 1.75rem; }
+@media (min-width: 48rem) { .worked-body { margin-left: 3.25rem; } }
+
+/* Before / after: two flat panels, never cards. */
+.ba { display: grid; gap: 1.5rem; align-items: start; }
+@media (min-width: 56rem) { .ba { grid-template-columns: 1fr 1fr; gap: 2rem; } }
+
+.ba-panel { border: 1px solid var(--rule); padding: 1.1rem 1.25rem 1.35rem; min-width: 0; }
+.ba-panel.is-after { border-color: color-mix(in srgb, var(--brass) 55%, transparent); }
+
+.ba-label {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+.is-after .ba-label { color: var(--brass-txt); }
+
+.ba-panel pre { padding: 0; font-size: 0.75rem; line-height: 1.75; }
+.ba-panel pre .cut { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.ba-panel pre .add { color: var(--brass-txt); }
+.ba-panel pre .tag { color: var(--muted); }
+
+.ba-verdict {
+  margin: 1.1rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.ba-verdict code { font-size: 0.8125em; color: var(--ink); }
+
+/* URL tree: HTML rather than SVG so it stays legible at any width. */
+.tree, .tree ul { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 0.8125rem; }
+.tree ul { margin-left: 0.45rem; padding-left: 0.85rem; border-left: 1px solid var(--rule); }
+.tree li { position: relative; padding: 0.22rem 0; }
+.tree ul > li::before {
+  content: "";
+  position: absolute;
+  left: -0.85rem;
+  top: 0.85em;
+  width: 0.6rem;
+  height: 1px;
+  background: var(--rule);
+}
+.tree .hub { color: var(--ink); }
+.tree .leaf { color: var(--brass-txt); }
+.tree .lone { color: var(--muted); }
+.tree .note { display: block; font-family: var(--sans); font-size: 0.8125rem; color: var(--muted); padding-top: 0.2rem; }
+.tree .flag { font-family: var(--sans); font-size: 0.6875rem; color: var(--muted); padding-left: 0.5rem; }
 
 /* ── Won't do ──────────────────────────────────────────────────────── */
 
@@ -578,37 +647,161 @@ git clone \
       <div><dt>10-measurement.md</dt><dd>Search Console, GA4, AI referral blind spots, prompt panels, experiment design.</dd></div>
       <div><dt>11-human-playbook.md</dt><dd>The work an agent cannot do, written for the business owner, with a weekly and monthly cadence.</dd></div>
       <div><dt>12-antipatterns.md</dt><dd>Penalised tactics, wasted-money tactics, agent-specific failure modes, and a refusal script.</dd></div>
+      <div><dt>scripts/audit-page.mjs</dt><dd>Titles and duplicates, canonicals, heading structure, image alt and dimensions, lazy loading on the LCP candidate, JSON-LD validity, self-serving review markup, orphan pages, thin content, robots and sitemap. Exits non-zero on any error.</dd></div>
+      <div><dt>scripts/structured-data.mjs</dt><dd>Builds and validates the JSON-LD graph from a business file. Node 22, no npm install.</dd></div>
+      <div><dt>templates/</dt><dd>An annotated <code>robots.txt</code> with the AI crawler policy, the business file, and a one-page checklist for a human.</dd></div>
     </dl>
   </div>
 </section>
 
-<section id="scripts">
-  <div class="wrap narrow">
-    <h2>Two scripts, no dependencies</h2>
-    <p class="dek"><code>audit-page.mjs</code> reads built HTML or a live URL and reports what is machine-checkable, ranked by severity. It exits non-zero on any error, so it works as a deploy gate. <code>structured-data.mjs</code> builds one connected JSON-LD graph from a business file and refuses the markup patterns that trigger manual actions.</p>
+<section id="practice" style="counter-reset: worked">
+  <div class="wrap">
+    <h2>What it actually does to a page</h2>
+    <p class="dek">A real case, in the order the skill runs it: a single-page site for a building contractor in Rome. Eight services, one title tag, no domain, no structured data worth the name.</p>
 
+    <article class="worked">
+      <div class="worked-head">
+        <h3>It measures before it touches anything</h3>
+        <p>The first command is the audit, and its output is the baseline. Nothing gets called an improvement later unless this number moved.</p>
+      </div>
+      <div class="worked-body">
 <pre class="term"><code><span class="dim">$</span> node scripts/audit-page.mjs ./dist
 
-<span class="dim">────────────────────────────────────────────────</span>
+<span class="dim">──────────────────────────────────────────────────</span>
 VISIBILITY AUDIT — 1 page
-<span class="dim">────────────────────────────────────────────────</span>
+<span class="dim">──────────────────────────────────────────────────</span>
 
 SITE
-
   <span class="sev-warn">WARN</span>   No robots.txt in the build output
   <span class="sev-warn">WARN</span>   No sitemap XML in the build output
 
 /
   <span class="dim">523 words · 14 headings · 8 images · 0 internal links</span>
   <span class="sev-err">ERROR</span>  og:image is a relative path
-         /logo.png — messaging apps require an
-         absolute URL and will show no preview.
+         /logo.png — messaging apps require an absolute
+         URL and will show no preview.
   <span class="sev-warn">WARN</span>   No canonical link
+  <span class="sev-warn">WARN</span>   4 images without width and height
   <span class="sev-warn">WARN</span>   JSON-LD "image" is a relative path
 
-<span class="dim">────────────────────────────────────────────────</span>
+<span class="dim">──────────────────────────────────────────────────</span>
 1 error, 8 warning, 0 info
-<span class="dim">────────────────────────────────────────────────</span></code></pre>
+<span class="dim">──────────────────────────────────────────────────</span></code></pre>
+      </div>
+    </article>
+
+    <article class="worked">
+      <div class="worked-head">
+        <h3>One page becomes nine</h3>
+        <p>This is the finding that produces growth, and no audit tool reports it, because the failure is an absence. Eight services listed on one page means one title, one heading, one topic — and nothing that can rank for any of the eight things people actually type.</p>
+      </div>
+      <div class="worked-body">
+        <div class="ba">
+          <div class="ba-panel">
+            <p class="ba-label">Before</p>
+            <ul class="tree">
+              <li><code class="lone">/</code><span class="note">One page. Eight services described in two lines each, inside a single section.</span></li>
+            </ul>
+            <p class="ba-verdict">Nothing here can rank for “rifacimento impianto elettrico Roma”. There is no page for it. Better headings would not change that.</p>
+          </div>
+          <div class="ba-panel is-after">
+            <p class="ba-label">After</p>
+            <ul class="tree">
+              <li><code class="hub">/</code>
+                <ul>
+                  <li><code class="hub">servizi/</code>
+                    <ul>
+                      <li><code class="leaf">impianti-elettrici-roma/</code></li>
+                      <li><code class="leaf">impianti-idraulici-roma/</code></li>
+                      <li><code class="leaf">condizionatori-roma/</code></li>
+                      <li><code class="leaf">ristrutturazioni-roma/</code></li>
+                      <li><code class="leaf">parquet-roma/</code></li>
+                      <li><code class="leaf">facciate-roma/</code></li>
+                      <li><code class="leaf">tetti-roma/</code></li>
+                      <li><code class="leaf">opere-strutturali-roma/</code></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <p class="ba-verdict">Eight intents, eight URLs, one hub linking them. Each one ships <code>noindex</code> and stays out of the sitemap until its text exists — eight empty pages is the exact pattern the scaled-content policy targets.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="worked">
+      <div class="worked-head">
+        <h3>A heading becomes retrievable</h3>
+        <p>Retrieval works over passages, and the heading is what tells the system what the passage under it answers. <code>Investimento</code> is retrievable for nothing. The question people type is retrievable for exactly itself.</p>
+      </div>
+      <div class="worked-body">
+        <div class="ba">
+          <div class="ba-panel">
+            <p class="ba-label">Before</p>
+<pre><code><span class="tag">&lt;h2&gt;</span><span class="cut">Investimento</span><span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;p&gt;</span>Ogni cantiere è diverso e il preventivo
+viene redatto dopo un sopralluogo tecnico
+accurato, valutando le specificità
+dell'immobile. Solo così possiamo…<span class="tag">&lt;/p&gt;</span></code></pre>
+            <p class="ba-verdict">Four lines before any number. A model extracting this passage gets no answer, and neither does a reader.</p>
+          </div>
+          <div class="ba-panel is-after">
+            <p class="ba-label">After</p>
+<pre><code><span class="tag">&lt;h2&gt;</span><span class="add">Quanto costa rifare un impianto
+elettrico a Roma?</span><span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="add">Per un appartamento di 80 m²</span> il
+rifacimento completo a norma CEI 64-8
+costa tra <span class="add">X e Y euro</span>, sopralluogo e
+certificazione inclusi. Il prezzo
+dipende da tre cose: …<span class="tag">&lt;/p&gt;</span></code></pre>
+            <p class="ba-verdict">Answer in the first two sentences, with a unit, a standard, and a range. The skill writes the shape; the numbers stay blank until the owner supplies them.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="worked">
+      <div class="worked-head">
+        <h3>The business becomes an entity</h3>
+        <p>One file describing the business, one command, one connected graph with stable identifiers — instead of the three disconnected blocks most sites ship. It also refuses the two markup patterns that trigger manual actions.</p>
+      </div>
+      <div class="worked-body">
+        <div class="ba">
+          <div class="ba-panel">
+            <p class="ba-label">In · business.json</p>
+<pre><code>{
+  "site": "https://example.com",
+  "name": "Edil D'Amico",
+  "type": "HomeAndConstruction<wbr>Business",
+  "address": { "city": "Roma" },
+  "serviceArea": ["Roma"],
+  "services": [ … ],
+  "sameAs": []
+}</code></pre>
+            <p class="ba-verdict"><code>sameAs</code> is empty because the Google Business Profile does not exist yet. The script says so rather than inventing one.</p>
+          </div>
+          <div class="ba-panel is-after">
+            <p class="ba-label">Out</p>
+<pre><code>{
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": <span class="add">"Organization"</span>,
+      "@id": "…/#organization" },
+    { "@type": <span class="add">"WebSite"</span>,
+      "publisher": { "@id": "…/#organization" } },
+    { "@type": <span class="add">"HomeAndConstructionBusiness"</span>,
+      "hasOfferCatalog": { … } }
+  ]
+}
+
+<span class="sev-warn">WARN</span>  Empty sameAs
+<span class="sev-warn">WARN</span>  No opening hours</code></pre>
+            <p class="ba-verdict">Three nodes, cross-referenced by <code>@id</code>. The warnings are the to-do list for the owner, not errors in the output.</p>
+          </div>
+        </div>
+      </div>
+    </article>
   </div>
 </section>
 
