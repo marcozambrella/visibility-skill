@@ -548,10 +548,39 @@ async function main() {
     const origin = new URL(target).origin;
     pages.push(auditPage(html, { ...ctxShared, url: target, origin }));
 
-    // The two site-level files, fetched separately.
+    /* The two site-level files. Both are looked for at the origin root, and
+       then in the audited page's own directory — a project page on GitHub
+       Pages, a docs subfolder, or any site served under a path puts them
+       there. Where they end up changes what they do, so report the
+       difference rather than a bare "missing". */
+    const base = new URL(target);
+    const subdir = base.pathname.replace(/[^/]*$/, "");
+
     for (const [file, code] of [["robots.txt", "robots"], ["sitemap.xml", "sitemap"]]) {
-      const r = await fetch(`${origin}/${file}`).catch(() => null);
-      if (!r || !r.ok) {
+      const atRoot = await fetch(`${origin}/${file}`).catch(() => null);
+
+      if (atRoot?.ok) {
+        if (file === "robots.txt") siteFindings.push(...auditRobots(await atRoot.text()));
+        continue;
+      }
+
+      const atPath = subdir === "/" ? null : await fetch(`${origin}${subdir}${file}`).catch(() => null);
+
+      if (atPath?.ok && file === "robots.txt") {
+        siteFindings.push({
+          severity: "warning",
+          code: "robots-not-at-root",
+          message: `robots.txt exists at ${subdir}${file} but not at the origin root`,
+          detail: "Crawlers only read robots.txt at the root of a host. At a subpath it is inert. This is normal for a GitHub Pages project site, where the root belongs to the account, not the repository — a custom domain is the only way to control it.",
+        });
+      } else if (atPath?.ok) {
+        siteFindings.push({
+          severity: "info",
+          code: "sitemap-at-path",
+          message: `Sitemap found at ${subdir}${file}`,
+          detail: "Valid, as long as it only lists URLs under that path. Submit it by full URL in Search Console, since no root robots.txt can point at it.",
+        });
+      } else {
         siteFindings.push({
           severity: "warning",
           code: `${code}-missing`,
@@ -560,8 +589,6 @@ async function main() {
             ? "Crawlers assume everything is allowed, and you lose the Sitemap: pointer."
             : "Sitemaps are how new and deep pages get discovered promptly.",
         });
-      } else if (file === "robots.txt") {
-        siteFindings.push(...auditRobots(await r.text()));
       }
     }
   } else {

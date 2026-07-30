@@ -1,3 +1,13 @@
+# Note: on a GitHub Pages project site this file is served at
+# /visibility-skill/robots.txt, and crawlers only read robots.txt at the root of
+# a host. It is therefore inert here, and kept only so the pattern is visible
+# and so it works immediately if this ever moves to a custom domain.
+#
+# The sitemap alongside it does work: a sitemap may live at a subpath as long as
+# it only lists URLs under that path. Submit it by full URL in Search Console.
+#
+# See reference/01-diagnose.md for the annotated version that matters.
+
 User-agent: *
 Allow: /
 
