@@ -7,6 +7,12 @@
  *   node audit-page.mjs https://example.com/   audit one live page
  *   node audit-page.mjs ./dist --json          machine-readable output
  *   node audit-page.mjs ./dist --quiet         only errors and warnings
+ *   node audit-page.mjs ./dist --ignore=noindex
+ *
+ * `--ignore` takes a comma-separated list of finding codes and downgrades them
+ * to info. Use it for findings that are deliberate on this site — most often
+ * `noindex` on pages gated until their content exists. The count of downgraded
+ * findings is always reported, so nothing disappears silently.
  *
  * Exits 1 when any error-level finding is present, so it works as a deploy gate.
  * Node 22+, zero dependencies.
@@ -438,11 +444,22 @@ function auditRobots(content) {
  * ------------------------------------------------------------------ */
 
 function report(pages, siteFindings, options) {
+  /* Deliberate findings get downgraded to info rather than dropped: the
+     report still shows them, it just stops them failing the build. */
+  let downgraded = 0;
+  const downgrade = (f) => {
+    if (!options.ignore.has(f.code) || f.severity === "info") return f;
+    downgraded++;
+    return { ...f, severity: "info", detail: `${f.detail ?? ""} [declared deliberate via --ignore]`.trim() };
+  };
+  for (const page of pages) page.findings = page.findings.map(downgrade);
+  siteFindings = siteFindings.map(downgrade);
+
   const all = [
     ...siteFindings.map((f) => ({ ...f, url: "(site)" })),
     ...pages.flatMap((p) => p.findings.map((f) => ({ ...f, url: p.stats.url }))),
   ];
-  const counts = { error: 0, warning: 0, info: 0 };
+  const counts = { error: 0, warning: 0, info: 0, downgraded };
   all.forEach((f) => counts[f.severity]++);
 
   if (options.json) {
@@ -476,7 +493,10 @@ function report(pages, siteFindings, options) {
   }
 
   console.log(`\n${line}`);
-  console.log(`${counts.error} error, ${counts.warning} warning, ${counts.info} info`);
+  console.log(
+    `${counts.error} error, ${counts.warning} warning, ${counts.info} info` +
+    (downgraded ? ` (${downgraded} declared deliberate)` : "")
+  );
   console.log(line + "\n");
   return counts;
 }
@@ -496,14 +516,18 @@ function printFinding(f) {
 
 async function main() {
   const args = process.argv.slice(2);
+  const ignoreArg = args.find((a) => a.startsWith("--ignore="));
   const options = {
     json: args.includes("--json"),
     quiet: args.includes("--quiet"),
+    ignore: new Set(
+      ignoreArg ? ignoreArg.slice("--ignore=".length).split(",").map((c) => c.trim()).filter(Boolean) : []
+    ),
   };
   const target = args.find((a) => !a.startsWith("--"));
 
   if (!target) {
-    console.error("Usage: node audit-page.mjs <directory|url> [--json] [--quiet]");
+    console.error("Usage: node audit-page.mjs <directory|url> [--json] [--quiet] [--ignore=code,code]");
     process.exit(2);
   }
 
