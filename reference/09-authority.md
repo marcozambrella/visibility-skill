@@ -58,9 +58,9 @@ forty questions well over a year builds a footprint no competitor can buy.
 
 **Your own original data.** The one asset that reliably attracts links without
 asking: publish something only you know. A tradesperson has job records. "Cosa
-abbiamo trovato dietro i muri in 200 ristrutturazioni a Roma" is a story a local
-paper runs and other sites cite. It is also, not coincidentally, the definition
-of information gain from `04-content.md`.
+we found behind the walls in 200 renovations" is a story a local paper runs and
+other sites cite. It is also, not coincidentally, the definition of information
+gain from `04-content.md`.
 
 ## Converting unlinked mentions
 
@@ -116,8 +116,9 @@ similarly named business.
 
 The ingredients:
 
-- **One canonical name**, used identically everywhere. Not "Edil D'Amico", "Edil
-  DAmico srl", and "Edildamico" across three profiles.
+- **One canonical name**, used identically everywhere. Not "Example
+  Renovations", "Example Renovations Ltd", and "ExampleRenovations" across
+  three profiles.
 - **A consistent one-sentence description** of what the business is, reused
   verbatim on the website, the Google profile, social bios, and directory
   listings. Contradictory descriptions produce contradictory answers.

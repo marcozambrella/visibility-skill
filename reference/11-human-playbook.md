@@ -26,9 +26,9 @@ Start it now; everything else waits on it.
 
 While you wait, prepare:
 
-- **The exact name.** Exactly as it appears on your invoices. Do not add "Roma"
-  or "economico" or your services to it. That gets profiles suspended, and your
-  competitors will report you.
+- **The exact name.** Exactly as it appears on your invoices. Do not add your
+  city, or "cheap", or your services to it. That gets profiles suspended, and
+  your competitors will report you.
 - **The address decision.** If customers can come to you, publish the address. If
   you go to them, hide the address and set a service area instead. Do not use a
   home address you do not want public, and never use a mailbox service.
@@ -85,8 +85,8 @@ already like you and they have forgotten to say so.
 **How to ask.** In person is twice as effective as any message. At handover, when
 they are happy with the result:
 
-> "Se è andata bene, mi farebbe molto comodo una recensione su Google. Le mando
-> il link su WhatsApp così lo trova quando ha un minuto."
+> "If you're happy with how it turned out, a Google review would really help
+> us. I'll text you the link so it's there when you have a minute."
 
 Then send the short review link from your profile. Do not make them search.
 
@@ -102,9 +102,9 @@ Then send the short review link from your profile. Do not make them search.
 week. A burst looks manufactured and gets filtered out.
 
 **Reply to every review within a few days.** Positive ones get two sentences
-naming the work: *"Grazie Marco, è stato un piacere lavorare in via Giulia sul
-rifacimento dell'impianto."* That reply is read by future customers, and the
-words in it tell Google what you do and where.
+naming the work: *"Thanks Sarah — good to work on the rewire in Chorlton."*
+That reply is read by future customers, and the words in it tell Google what
+you do and where.
 
 Negative ones get a short factual reply and an offer to talk offline. Never
 argue in public. A calm reply to a one-star review sells better than the five-star
@@ -118,13 +118,12 @@ One evening. Use the copy-pasted block from week one for every single entry.
 
 | Where | Why | Time |
 |---|---|---|
-| Bing Places | About 10% of Italian searches, and it feeds Microsoft Copilot | 20 min |
+| Bing Places | Roughly a tenth of searches in most markets, and it feeds Microsoft Copilot | 20 min |
 | Apple Business Connect | Every iPhone user asking Siri or Maps | 20 min |
-| PagineGialle.it | Still the most authoritative Italian directory | 20 min |
-| Virgilio / TuttoCittà | High authority, still consulted | 15 min |
+| Your national directory | Yell, PagesJaunes, PagineGialle, Yelp — whichever leads your market | 20 min |
 | Facebook page | A citation even if you never post again | 20 min |
 | Your trade association | Real authority, topically relevant, almost nobody claims theirs | 30 min |
-| Camera di Commercio record | Public and authoritative; check it matches | 15 min |
+| Public company register | Companies House or equivalent; check it matches | 15 min |
 | Supplier "find an installer" pages | The best links available to a trade, and free | 1 hour |
 
 That last row is the one people skip and it is the most valuable. If you install
@@ -162,7 +161,7 @@ Pick a fixed slot. Friday afternoon works because the week's jobs are fresh.
 - **Search for yourself.** From a phone, logged out, not at your office. Search
   your main service plus the city. Where do you appear in the map results? Note
   it. Do this from the same place every month or the numbers are not comparable.
-- **Ask an assistant about you.** Type "chi fa [your service] a [your city]" into
+- **Ask an assistant about you.** Type "who does [your service] in [your city]" into
   ChatGPT and Perplexity, and "cosa fa [your business name]". Two things matter:
   whether you appear at all, and whether what it says about you is *correct*. A
   confidently wrong statement about your prices or your area is worth reporting

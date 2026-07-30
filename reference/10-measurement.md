@@ -63,9 +63,9 @@ are measuring nothing.
 
 ```html
 <!-- Each of these is a conversion. Track the click. -->
-<a href="tel:+390612345678" data-conversione="telefono">…</a>
-<a href="https://wa.me/39…" data-conversione="whatsapp">…</a>
-<a href="mailto:info@…" data-conversione="email">…</a>
+<a href="tel:+441614960000" data-conversion="phone">…</a>
+<a href="https://wa.me/44…" data-conversion="whatsapp">…</a>
+<a href="mailto:info@…" data-conversion="email">…</a>
 ```
 
 With GA4, send an event on click of any element carrying that attribute. Without
@@ -88,7 +88,7 @@ Direct. Some arrive through a redirect that strips it. There is no reliable way
 to attribute all of it.
 
 **The workaround worth doing:** watch Direct traffic to deep pages. Nobody types
-`/servizi/impianti-elettrici-roma/` from memory. A rise in Direct traffic to
+`/services/house-rewiring-manchester/` from memory. A rise in Direct traffic to
 internal pages, with no campaign running, is usually assistant or messaging-app
 traffic.
 
@@ -106,8 +106,9 @@ will produce a confident wrong conclusion.
 
 - 10-20 information needs, drawn from the mapped clusters.
 - **3-5 paraphrases each.** People ask differently.
-- Include unbranded discovery prompts ("chi può rifare un impianto elettrico a
-  Roma"), branded prompts ("cosa fa Edil D'Amico"), and comparison prompts.
+- Include unbranded discovery prompts ("who can rewire a house in
+  Manchester"), branded prompts ("what does Example Renovations do"), and
+  comparison prompts.
 
 **Run it properly:**
 

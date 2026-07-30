@@ -56,7 +56,7 @@ importance, and do not add categories for services you do not perform.
 **The rest of the profile, in order of value:**
 
 - **Name.** The real business name. Adding keywords to it ("Mario Rossi
-  Elettricista Roma Economico") is a guideline violation, it is the single most
+  Cheap Electrician Manchester") is a guideline violation, it is the single most
   reported spam type by competitors, and it gets profiles suspended.
 - **Address or service area.** If customers cannot visit, hide the address and
   set a service area. Never publish a virtual office.
@@ -97,8 +97,8 @@ The second-largest lever, the most visible one, and the one owners neglect.
 3. **Rating.** Counterintuitively, a perfect 5.0 converts worse than 4.6-4.9,
    which reads as real. Do not chase 5.0.
 4. **Text content.** Reviews that name the service and the area are relevance
-   signals, not just trust signals. "Hanno rifatto l'impianto elettrico nel mio
-   appartamento a Monteverde" is worth more than "bravissimi".
+   signals, not just trust signals. "They rewired my flat in Chorlton and
+   finished a day early" is worth more than "great guys".
 5. **Owner responses.** Respond to all of them, positive and negative, within a
    few days. It is a visible engagement signal and the response is read by future
    customers far more than the review.
@@ -137,32 +137,35 @@ Underestimated, and the one thing a competitor cannot copy.
 ## NAP and citations
 
 **NAP** is Name, Address, Phone. The requirement is boring and absolute:
-**byte-identical everywhere.** "Via Roma 12" and "Via Roma, 12" and "V. Roma 12"
-are three different businesses to a matching algorithm.
+**byte-identical everywhere.** "12 High Street", "12 High St." and "12, High
+Street" are three different businesses to a matching algorithm.
 
 Write the canonical NAP block once, in a file, and copy-paste it everywhere:
 
 ```
 Name:    Exact Legal or Trading Name
-Address: Via Example 12, 00100 Roma RM, Italia
-Phone:   +39 06 1234567
+Address: 12 Example Street, Manchester M1 1AA, United Kingdom
+Phone:   +44 161 496 0000
 Website: https://example.com/
 ```
 
-**Where to list, for Italy**, in order of value:
+**Where to list**, in order of value. The first three are the same everywhere;
+the rest depend on your country.
 
 1. **Google Business Profile** — the one that matters.
-2. **Bing Places** — Bing holds around 10% of Italian search and feeds Copilot.
+2. **Bing Places** — Bing holds roughly a tenth of search in most markets and
+   feeds Microsoft Copilot.
 3. **Apple Business Connect** — every iPhone user asking Siri or Maps.
-4. **PagineGialle.it** — still the most authoritative Italian directory.
-5. **Virgilio / TuttoCittà** — high authority, still consulted.
-6. **Facebook page** — a citation and a `sameAs` target even if you never post.
-7. **Trade-specific directories** — for construction: chamber of commerce
-   listings, trade association member directories, and any supplier or
-   manufacturer "find an installer" page. These are the highest-quality citations
-   available to a trade business and almost nobody claims them.
-8. **The chamber of commerce (Camera di Commercio) record**, which is public and
-   authoritative, and should match.
+4. **Your country's dominant national directory** — Yell in the UK,
+   PagesJaunes in France, PagineGialle in Italy, Gelbe Seiten in Germany,
+   Yelp in the US. One is usually clearly ahead; find which and claim it.
+5. **Facebook page** — a citation and a `sameAs` target even if you never post.
+6. **Trade-specific directories** — trade association member lists, and any
+   supplier or manufacturer "find an installer" page. These are the
+   highest-quality citations available to a trade business and almost nobody
+   claims them.
+7. **The public company register** — Companies House, the chamber of commerce,
+   whatever your jurisdiction uses. It is authoritative and it should match.
 
 Do not buy a citation-blasting service. A hundred junk directories add nothing
 and create a hundred places where your NAP will drift out of sync. Twenty

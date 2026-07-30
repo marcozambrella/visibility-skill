@@ -3,39 +3,39 @@
 
   "site": "https://example.com",
   "name": "Business Name",
-  "legalName": "Business Name S.r.l.",
+  "legalName": "Business Name Ltd",
   "type": "HomeAndConstructionBusiness",
   "description": "One sentence saying what the business does, where, and since when. Reuse this exact sentence on the Google Business Profile and in every directory listing.",
-  "language": "it-IT",
+  "language": "en-GB",
 
   "logo": "/logo.png",
   "image": "/hero.jpg",
 
-  "telephone": "+39 06 1234567",
+  "telephone": "+44 161 496 0000",
   "email": "info@example.com",
-  "vatID": "IT01234567890",
+  "vatID": "GB123456789",
   "foundingDate": "2010",
-  "priceRange": "€€",
+  "priceRange": "££",
 
   "_comment_address": "For a business customers can visit, fill street and postalCode. For a business that travels to the customer, omit them, set \"hideAddress\": true, and rely on serviceArea.",
   "address": {
-    "street": "Via Example 12",
-    "city": "Roma",
-    "postalCode": "00100",
-    "region": "RM",
-    "country": "IT"
+    "street": "12 Example Street",
+    "city": "Manchester",
+    "postalCode": "M1 1AA",
+    "region": "Greater Manchester",
+    "country": "GB"
   },
   "hideAddress": false,
 
   "_comment_geo": "At least five decimal places. Take them from the Google Business Profile pin, not from a city-level lookup.",
   "geo": {
-    "latitude": 41.90278,
-    "longitude": 12.49637
+    "latitude": 53.48095,
+    "longitude": -2.23743
   },
 
   "serviceArea": [
-    "Roma",
-    { "type": "AdministrativeArea", "name": "Città metropolitana di Roma Capitale" }
+    "Manchester",
+    { "type": "AdministrativeArea", "name": "Greater Manchester" }
   ],
 
   "openingHours": [
@@ -59,12 +59,12 @@
     "Topic of competence two"
   ],
 
-  "servicesLabel": "Servizi",
+  "servicesLabel": "Services",
   "services": [
     {
       "name": "Service name as a customer would say it",
       "description": "One sentence.",
-      "url": "/servizi/service-slug/"
+      "url": "/services/service-slug/"
     }
   ]
 }

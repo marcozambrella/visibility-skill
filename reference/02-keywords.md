@@ -105,9 +105,9 @@ The cheap and reliable way to verify: search both queries and compare the top te
 URLs. Three or more shared URLs means Google treats them as the same need, and
 one page should serve both. Fewer than three means two pages.
 
-Do not cluster by string similarity. "Impianto elettrico casa" and "impianto
-elettrico costo" share words and have different intents; the first wants a
-service, the second wants a number.
+Do not cluster by string similarity. "house rewiring" and "house rewiring
+cost" share words and have different intents; the first wants a service, the
+second wants a number.
 
 ### 5. Page mapping
 
@@ -116,7 +116,7 @@ is the site architecture:
 
 | Cluster | Primary query | Supporting queries | URL | Intent | Exists? |
 |---|---|---|---|---|---|
-| Electrical rewiring | rifacimento impianto elettrico roma | costo, tempi, a norma | /servizi/impianti-elettrici-roma/ | Transactional + local | No |
+| Rewiring | house rewiring manchester | cost, how long, regulations | /services/house-rewiring-manchester/ | Transactional + local | No |
 
 Two failure modes this table prevents:
 

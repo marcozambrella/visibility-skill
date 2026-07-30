@@ -9,16 +9,16 @@ do the relevance work before the extractability work.
 The highest-leverage 60 characters on the page. It is a ranking input, the
 clickable headline in results, and the label an assistant uses when it names you.
 
-- **Lead with the thing searched for.** `Rifacimento impianti elettrici a Roma`
-  beats `Servizi | Edil D'Amico | Eccellenza dal 2010`.
+- **Lead with the thing searched for.** `House rewiring in Manchester`
+  beats `Services | Example Renovations | Excellence since 2010`.
 - **50-60 characters** before truncation on desktop, less on mobile. Being cut off
   is not a ranking penalty, it is a click penalty.
 - **Unique across the site.** Duplicate titles are a signal that the pages are
   duplicates. `audit-page.mjs` flags them.
 - **Brand at the end, separated**, and only if the brand is worth the characters.
   For an unknown local business it usually is not; for a known one it lifts CTR.
-- **No stuffing.** `Elettricista Roma | Elettricista Roma Nord | Elettricista
-  Economico Roma` is a **Harmful** tier pattern. Keyword stuffing measurably
+- **No stuffing.** `Electrician Manchester | Electrician Manchester North |
+  Cheap Electrician Manchester` is a **Harmful** tier pattern. Keyword stuffing measurably
   *reduced* position-adjusted visibility in controlled GEO testing (17.7% vs
   19.3% baseline), so it fails on the new surfaces too.
 
@@ -46,8 +46,8 @@ about. This is the single most useful structural change you can make.
 - **One H1**, matching the page's primary intent, usually close to the title but
   written for a human reading the page.
 - **H2 per sub-question**, phrased the way the question is asked. A heading of
-  `Quanto costa rifare un impianto elettrico?` is retrievable for that query. A
-  heading of `Investimento` is not retrievable for anything.
+  `How much does it cost to rewire a house?` is retrievable for that query. A
+  heading of `Investment` is not retrievable for anything.
 - **No level skips.** H2 → H4 confuses the outline for both parsers and screen
   readers.
 - **Headings are not decoration.** Do not use a heading tag to make text big; use
@@ -60,11 +60,11 @@ Under each heading, the first two sentences must contain the answer. Then the
 nuance, then the detail.
 
 ```
-## Quanto costa rifare un impianto elettrico a Roma?
+## How much does it cost to rewire a three-bedroom house?
 
-Per un appartamento di 80 m² il rifacimento completo a norma CEI 64-8
-costa tra X e Y euro, sopralluogo e certificazione inclusi. Il prezzo
-dipende da tre cose: [...]
+A full rewire of a 90 m² house to current wiring regulations costs
+between £X and £Y, survey and certificate included. The price depends
+on three things: [...]
 ```
 
 This works for three independent reasons, which is rare:
@@ -87,12 +87,12 @@ Around 44% of LLM citations come from the first 30% of a document, so front-load
 Write each section so it survives being lifted out of the page. That means:
 
 - No pronouns referring back across headings. "It costs less" is useless out of
-  context; "il rifacimento parziale costa meno" is not.
+  context; "a partial rewire costs less" is not.
 - No "as mentioned above". The reader of that passage did not read above.
 - Name the entity in each major section: the business name, the service, the
   city. Not stuffed — named, once, where a human would naturally repeat it.
-- Units, currencies, and dates spelled out. "€3.500 (aggiornato a gennaio 2026)"
-  survives extraction; "circa tremilacinquecento" and "quest'anno" do not.
+- Units, currencies, and dates spelled out. "£3,500 (updated January 2026)"
+  survives extraction; "around three and a half thousand" and "this year" do not.
 
 ## Information gain
 
@@ -105,16 +105,16 @@ is free.
 Sources of genuine information gain, roughly in order of cost:
 
 - **Your own numbers.** Prices, timelines, measured results, failure rates. A
-  contractor who publishes "un rifacimento in un bilocale richiede 9-12 giorni
-  lavorativi" has said something no competitor's generic page says.
+  contractor who publishes "rewiring a one-bedroom flat takes 9 to 12 working
+  days" has said something no competitor's generic page says.
 - **Photographs of your own work.** Not stock. Before, during, after, with
   captions naming what was done. Impossible to copy, and a direct E-E-A-T signal.
-- **Named constraints and edge cases.** "In un palazzo degli anni '60 in centro
-  la traccia sui muri portanti non è consentita, quindi si passa in canalina."
+- **Named constraints and edge cases.** "In a 1960s block you cannot chase
+  cables into a load-bearing wall, so it runs in surface trunking instead."
   Only someone who has done the work knows this.
 - **Original data.** A survey, an analysis of your own job records, a comparison
   you actually ran.
-- **A clear negative.** "Non facciamo X" is information, and it is trusted
+- **A clear negative.** "We do not do X" is information, and it is trusted
   because it costs you something to say.
 
 What is *not* information gain: rewording the top three results, adding a
@@ -131,8 +131,8 @@ For a small business, the concrete checklist:
 
 - **A real About page** naming real people, with a photograph, with what they
   actually do and how long they have done it.
-- **Author or reviewer attribution** on anything advisory. "Scheda tecnica
-  verificata da [nome], responsabile di cantiere" beats an anonymous page.
+- **Author or reviewer attribution** on anything advisory. "Reviewed by
+  [name], site manager" beats an anonymous page.
 - **Verifiable credentials** where they exist: VAT number, licence numbers,
   certifications, insurance, trade association membership. Put them in the footer
   and in structured data.

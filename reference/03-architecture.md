@@ -14,22 +14,22 @@ the same eight pages floating unlinked read as eight unrelated documents.
 below is detail.
 
 **Readable, in the site's language, lowercase, hyphen-separated.** A URL is shown
-in results, read aloud by assistants, and pasted into messages. `/servizi/
-impianti-elettrici-roma/` communicates; `/p?id=4471` does not.
+in results, read aloud by assistants, and pasted into messages.
+`/services/house-rewiring-manchester/` communicates; `/p?id=4471` does not.
 
 **Short and shallow.** Directory depth should reflect real hierarchy, not
 organizational charts. Three levels is plenty for most sites:
 
 ```
-/                                   home
-/servizi/                           hub
-/servizi/impianti-elettrici-roma/   leaf
+/                                        home
+/services/                               hub
+/services/house-rewiring-manchester/     leaf
 ```
 
 **Include the differentiating term, once.** For a local service business, the
 city belongs in the URL of a service page, because it is the differentiator
 between your page and the ten thousand other pages about that service. Once. Not
-`/roma/servizi-roma/impianti-elettrici-roma-roma/`. That is stuffing and it is a
+`/manchester/services-manchester/rewiring-manchester-uk/`. That is stuffing and it is a
 **Harmful** tier tactic.
 
 **Never change a URL without a 301.** Changing URLs for cosmetic reasons is one
@@ -78,8 +78,8 @@ For a local business add a second axis when, and only when, you have genuinely
 distinct content per area:
 
 ```
-/servizi/impianti-elettrici-roma/          the service
-/zone/roma-nord/                           the area, if you have real content
+/services/house-rewiring-manchester/       the service
+/areas/chorlton/                           the area, if you have real content
 ```
 
 Location pages with nothing but the city name swapped are doorway pages, a named
@@ -94,7 +94,7 @@ The most undervalued lever in this whole skill, and the only one you can pull
 without anyone's permission.
 
 **Anchor text is a relevance signal you control.** Link to the electrical page
-with the words *"rifacimento dell'impianto elettrico"*, not with *"click here"*
+with the words *"rewiring a house"*, not with *"click here"*
 or the bare URL. Vary it naturally across links; do not use the identical exact
 phrase forty times, which reads as manipulation.
 
@@ -168,9 +168,9 @@ A tree, and a table of redirects if anything moved:
 
 ```
 /                                  home            [exists]
-/servizi/                          hub             [create]
-/servizi/impianti-elettrici-roma/  leaf            [create]
-/servizi/tetti-roma/               leaf            [create]
+/services/                             hub             [create]
+/services/house-rewiring-manchester/   leaf            [create]
+/services/roofing-manchester/          leaf            [create]
 ...
 ```
 

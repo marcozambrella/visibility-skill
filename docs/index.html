@@ -657,7 +657,7 @@ git clone \
 <section id="practice" style="counter-reset: worked">
   <div class="wrap">
     <h2>What it actually does to a page</h2>
-    <p class="dek">A real case, in the order the skill runs it: a single-page site for a building contractor in Rome. Eight services, one title tag, no domain, no structured data worth the name.</p>
+    <p class="dek">A typical case, in the order the skill runs it: a single-page site for a home renovation company. Eight services, one title tag, no domain configured, no structured data worth the name.</p>
 
     <article class="worked">
       <div class="worked-head">
@@ -702,29 +702,29 @@ SITE
             <ul class="tree">
               <li><code class="lone">/</code><span class="note">One page. Eight services described in two lines each, inside a single section.</span></li>
             </ul>
-            <p class="ba-verdict">Nothing here can rank for “rifacimento impianto elettrico Roma”. There is no page for it. Better headings would not change that.</p>
+            <p class="ba-verdict">Nothing here can rank for “house rewiring manchester”. There is no page for it. Better headings would not change that.</p>
           </div>
           <div class="ba-panel is-after">
             <p class="ba-label">After</p>
             <ul class="tree">
               <li><code class="hub">/</code>
                 <ul>
-                  <li><code class="hub">servizi/</code>
+                  <li><code class="hub">services/</code>
                     <ul>
-                      <li><code class="leaf">impianti-elettrici-roma/</code></li>
-                      <li><code class="leaf">impianti-idraulici-roma/</code></li>
-                      <li><code class="leaf">condizionatori-roma/</code></li>
-                      <li><code class="leaf">ristrutturazioni-roma/</code></li>
-                      <li><code class="leaf">parquet-roma/</code></li>
-                      <li><code class="leaf">facciate-roma/</code></li>
-                      <li><code class="leaf">tetti-roma/</code></li>
-                      <li><code class="leaf">opere-strutturali-roma/</code></li>
+                      <li><code class="leaf">house-rewiring-manchester/</code></li>
+                      <li><code class="leaf">plumbing-manchester/</code></li>
+                      <li><code class="leaf">air-conditioning-manchester/</code></li>
+                      <li><code class="leaf">renovations-manchester/</code></li>
+                      <li><code class="leaf">flooring-manchester/</code></li>
+                      <li><code class="leaf">rendering-manchester/</code></li>
+                      <li><code class="leaf">roofing-manchester/</code></li>
+                      <li><code class="leaf">structural-work-manchester/</code></li>
                     </ul>
                   </li>
                 </ul>
               </li>
             </ul>
-            <p class="ba-verdict">Eight intents, eight URLs, one hub linking them. Each one ships <code>noindex</code> and stays out of the sitemap until its text exists — eight empty pages is the exact pattern the scaled-content policy targets.</p>
+            <p class="ba-verdict">Eight intents, eight URLs, one hub linking them. The city appears once per slug, because it is what separates this page from the ten thousand others about rewiring. Each page ships <code>noindex</code> and stays out of the sitemap until its text exists — eight empty pages is the exact pattern the scaled-content policy targets.</p>
           </div>
         </div>
       </div>
@@ -733,28 +733,28 @@ SITE
     <article class="worked">
       <div class="worked-head">
         <h3>A heading becomes retrievable</h3>
-        <p>Retrieval works over passages, and the heading is what tells the system what the passage under it answers. <code>Investimento</code> is retrievable for nothing. The question people type is retrievable for exactly itself.</p>
+        <p>Retrieval works over passages, and the heading is what tells the system what the passage under it answers. <code>Investment</code> is retrievable for nothing. The question people actually type is retrievable for exactly itself.</p>
       </div>
       <div class="worked-body">
         <div class="ba">
           <div class="ba-panel">
             <p class="ba-label">Before</p>
-<pre><code><span class="tag">&lt;h2&gt;</span><span class="cut">Investimento</span><span class="tag">&lt;/h2&gt;</span>
-<span class="tag">&lt;p&gt;</span>Ogni cantiere è diverso e il preventivo
-viene redatto dopo un sopralluogo tecnico
-accurato, valutando le specificità
-dell'immobile. Solo così possiamo…<span class="tag">&lt;/p&gt;</span></code></pre>
-            <p class="ba-verdict">Four lines before any number. A model extracting this passage gets no answer, and neither does a reader.</p>
+<pre><code><span class="tag">&lt;h2&gt;</span><span class="cut">Investment</span><span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;p&gt;</span>Every project is unique, and our quote
+is prepared following a thorough on-site
+survey that takes into account the
+specific characteristics of…<span class="tag">&lt;/p&gt;</span></code></pre>
+            <p class="ba-verdict">Four lines before any number. A model extracting this passage gets no answer out of it, and neither does a reader.</p>
           </div>
           <div class="ba-panel is-after">
             <p class="ba-label">After</p>
-<pre><code><span class="tag">&lt;h2&gt;</span><span class="add">Quanto costa rifare un impianto
-elettrico a Roma?</span><span class="tag">&lt;/h2&gt;</span>
-<span class="tag">&lt;p&gt;</span><span class="add">Per un appartamento di 80 m²</span> il
-rifacimento completo a norma CEI 64-8
-costa tra <span class="add">X e Y euro</span>, sopralluogo e
-certificazione inclusi. Il prezzo
-dipende da tre cose: …<span class="tag">&lt;/p&gt;</span></code></pre>
+<pre><code><span class="tag">&lt;h2&gt;</span><span class="add">How much does it cost to rewire
+a three-bedroom house?</span><span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="add">A full rewire of a 90 m² house</span> to
+current wiring regulations costs
+between <span class="add">£X and £Y</span>, survey and
+certificate included. The price
+depends on three things: …<span class="tag">&lt;/p&gt;</span></code></pre>
             <p class="ba-verdict">Answer in the first two sentences, with a unit, a standard, and a range. The skill writes the shape; the numbers stay blank until the owner supplies them.</p>
           </div>
         </div>
@@ -772,10 +772,10 @@ dipende da tre cose: …<span class="tag">&lt;/p&gt;</span></code></pre>
             <p class="ba-label">In · business.json</p>
 <pre><code>{
   "site": "https://example.com",
-  "name": "Edil D'Amico",
+  "name": "Example Renovations",
   "type": "HomeAndConstruction<wbr>Business",
-  "address": { "city": "Roma" },
-  "serviceArea": ["Roma"],
+  "address": { "city": "Manchester" },
+  "serviceArea": ["Manchester"],
   "services": [ … ],
   "sameAs": []
 }</code></pre>

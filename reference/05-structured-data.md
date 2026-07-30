@@ -101,13 +101,13 @@ between amateur and competent structured data.
     },
     {
       "@type": "WebPage",
-      "@id": "https://example.com/servizi/x/#webpage",
-      "url": "https://example.com/servizi/x/",
+      "@id": "https://example.com/services/x/#webpage",
+      "url": "https://example.com/services/x/",
       "name": "Page title",
       "isPartOf": { "@id": "https://example.com/#website" },
       "about": { "@id": "https://example.com/#organization" },
-      "primaryImageOfPage": { "@id": "https://example.com/servizi/x/#primaryimage" },
-      "breadcrumb": { "@id": "https://example.com/servizi/x/#breadcrumb" },
+      "primaryImageOfPage": { "@id": "https://example.com/services/x/#primaryimage" },
+      "breadcrumb": { "@id": "https://example.com/services/x/#breadcrumb" },
       "inLanguage": "it-IT"
     }
   ]
@@ -161,13 +161,13 @@ is common and it hurts.
   "name": "Business Name",
   "address": {
     "@type": "PostalAddress",
-    "addressLocality": "Roma",
-    "addressRegion": "RM",
-    "addressCountry": "IT"
+    "addressLocality": "Manchester",
+    "addressRegion": "Greater Manchester",
+    "addressCountry": "GB"
   },
   "areaServed": [
-    { "@type": "City", "name": "Roma" },
-    { "@type": "AdministrativeArea", "name": "Città metropolitana di Roma Capitale" }
+    { "@type": "City", "name": "Manchester" },
+    { "@type": "AdministrativeArea", "name": "Greater Manchester" }
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
@@ -177,9 +177,9 @@ is common and it hurts.
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "Rifacimento impianti elettrici",
-          "url": "https://example.com/servizi/impianti-elettrici-roma/",
-          "areaServed": { "@type": "City", "name": "Roma" }
+          "name": "House rewiring",
+          "url": "https://example.com/services/house-rewiring-manchester/",
+          "areaServed": { "@type": "City", "name": "Manchester" }
         }
       }
     ]
@@ -198,11 +198,11 @@ breadcrumb trail.
 ```json
 {
   "@type": "BreadcrumbList",
-  "@id": "https://example.com/servizi/x/#breadcrumb",
+  "@id": "https://example.com/services/x/#breadcrumb",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://example.com/" },
-    { "@type": "ListItem", "position": 2, "name": "Servizi", "item": "https://example.com/servizi/" },
-    { "@type": "ListItem", "position": 3, "name": "Impianti elettrici" }
+    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://example.com/services/" },
+    { "@type": "ListItem", "position": 3, "name": "House rewiring" }
   ]
 }
 ```
