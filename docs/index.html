@@ -73,8 +73,14 @@ body {
    screens and the numbers move inline.
    ──────────────────────────────────────────────────────────────────── */
 
+/*
+  Il foglio occupa tutta la finestra. Non c'è un tetto alla larghezza: a
+  riempire lo schermo ci pensa l'apparato (figure, tabelle, listati, elenchi
+  a due colonne), mentre la prosa resta alla sua misura. Una riga di testo
+  larga quanto un monitor non si legge: l'occhio perde il capo riga.
+*/
 .sheet {
-  max-width: 64rem;
+  max-width: none;
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
@@ -83,6 +89,17 @@ body {
 
 @media (min-width: 60rem) {
   .sheet { padding-left: calc(var(--gutter) + 5.5rem); }
+}
+
+/*
+  Dalle finestre larghe in poi gli elenchi di voci brevi vanno su due
+  colonne. È il modo in cui un documento stampato usa la larghezza senza
+  allungare le righe.
+*/
+@media (min-width: 82rem) {
+  .stages, .manifest, .refs { columns: 2; column-gap: 4rem; }
+  .stages li, .manifest > div, .refs li { break-inside: avoid; }
+  .stages li:first-child, .manifest > div:first-child { border-top: 1px solid var(--hairline); }
 }
 
 p { margin: 0 0 1.1em; max-width: var(--measure); text-wrap: pretty; }
@@ -549,7 +566,186 @@ git clone \
     <cite>Google Search Central, AI features documentation <a class="cite" href="#r6">[6]</a></cite>
   </blockquote>
 
+  <h3>What “already in the context window” means</h3>
+
+  <p class="col">The phrase decides how much of the published guidance is worth anything, so it is worth stating without jargon.</p>
+
+  <p class="col">In the experiments behind the headline numbers, the researchers handed the model five documents and asked which of them it would quote. Then they rewrote one of the five — added a statistic, added a quotation — and measured whether the model quoted that one more often. It did.</p>
+
+  <p class="col">What the experiment never tested is <strong>whether your document would be among the five in the first place</strong>. That is the part that decides whether anyone ever sees you, and it is settled earlier, by relevance and authority — stages two and three of Figure 1. Rewriting a page to sound more quotable improves your odds in a room you have not been invited into.</p>
+
+  <p class="col">When someone did measure the whole thing, invitation included, the rewriting made it worse <a class="cite" href="#r3">[3]</a>: the edits that make a passage more quotable also blur what the page is about, and being clearly about something is what gets you retrieved.</p>
+
   <p class="col" style="margin-top:1.6rem">Three findings did replicate: topical relevance, described as the most reproducible factor; position in the ranking or context window, whose effect exceeds that of most rewrites; and extractable evidence — statistics, dates, definitions, quotations — conditional on retrieval having already occurred <a class="cite" href="#r5">[5]</a>.</p>
+</section>
+
+<section id="measurements">
+  <h2 class="head"><span class="n">5</span>The measurements</h2>
+
+  <p class="lead col">The numbers that changed how this skill was built, grouped by what they answer. Each table is followed by its plain reading. Sources differ in strength: platform documentation and the peer-reviewed survey are marked separately from industry aggregates, which are directional rather than exact.</p>
+
+  <h3><span class="n">5.1</span>Where AI answers get their sources</h3>
+
+  <p class="col">If a model has to name somewhere, it names the places where people already discuss things and the places with editorial reputation. Rarely your own website.</p>
+
+  <figure class="wide">
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">What was counted</th><th scope="col">Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Most-cited single domain</th><td class="num-cell">Reddit, ~40%</td><td>Frequency of appearance across major AI engines</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Wikipedia share, ChatGPT</th><td class="num-cell">26&ndash;48%</td><td>Share of ChatGPT's top-ten citations, depending on the study</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">News and established publishers</th><td class="num-cell">38&ndash;51%</td><td>Share of citations across platforms</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Concentration</th><td class="num-cell">15 domains → 68%</td><td>Consolidated citation share held by the top fifteen domains</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Ceiling for any one domain</th><td class="num-cell">~5%</td><td>Highest share held by a single domain on any one platform, over 200 million prompts</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Overlap, ChatGPT ∩ Perplexity</th><td class="num-cell">11%</td><td>Share of domains cited by both, across 680 million citations</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Overlap, AI Overviews ∩ AI Mode</th><td class="num-cell">13.7%</td><td>Citation overlap between Google's two AI surfaces</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Cited but not ranking</th><td class="num-cell">53%</td><td>Domains cited in AI Overviews that do not appear in the organic top ten for the same query</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Sources per answer</th><td class="num-cell">Perplexity ≈ 3×</td><td>Sources cited per response, against ChatGPT</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption><b>Table 3.</b> Source selection across AI surfaces. <b>In plain terms:</b> there is no single “AI” to optimise for. Two engines agree on roughly a tenth of their sources, and Google's own two AI surfaces agree on about an eighth. Citation is also concentrated: fifteen domains hold two thirds of it, and none of them is a small business. Being cited yourself is the exception; being <em>talked about</em> on those fifteen domains is the mechanism.</figcaption>
+  </figure>
+
+  <h3><span class="n">5.2</span>How often the AI answers at all</h3>
+
+  <p class="col">A surface that does not activate cannot cite anyone. Activation depends heavily on how the question is phrased.</p>
+
+  <figure class="wide">
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">What it means</th><th scope="col">Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">AI Overview activation, all queries</th><td class="num-cell">13.7%</td><td>Share of queries where an AI Overview appears at all</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Activation on question-shaped queries</th><td class="num-cell">64.7%</td><td>Same measure, restricted to queries phrased as a question</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Sub-queries per question, AI Mode</th><td class="num-cell">8&ndash;12</td><td>Synthetic sub-queries the system runs in parallel before answering</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Activation on local queries</th><td class="num-cell">~40%</td><td>Share of local business queries showing an AI Overview</td><td><a class="cite" href="#r9">[9]</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption><b>Table 4.</b> Activation rates. <b>In plain terms:</b> phrasing decides everything. The same information need typed as three words gets ordinary results; typed as a question, it gets an AI answer two thirds of the time. And that answer is not built from one search — the system quietly runs eight to twelve related searches and merges them. This is why a page that answers three of a topic's ten questions loses to one that answers nine, and why coverage beats keyword placement.</figcaption>
+  </figure>
+
+  <h3><span class="n">5.3</span>Recognition is solved; discovery is not</h3>
+
+  <p class="col">The single most useful pair of numbers in the whole file, because it says where the effort should go.</p>
+
+  <figure class="wide">
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">Engine</th><th scope="col">Described correctly when named</th><th scope="col">Surfaced when not named</th><th scope="col">Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">ChatGPT</th><td class="num-cell">99.4%</td><td class="num-cell">3.32%</td><td><a class="cite" href="#r11">[11]</a></td></tr>
+          <tr><th scope="row">Perplexity</th><td class="num-cell">94.3%</td><td class="num-cell">8.29%</td><td><a class="cite" href="#r11">[11]</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption><b>Table 5.</b> Recognition against organic discovery in product queries. <b>In plain terms:</b> ask an assistant about a business by name and it will almost always describe it correctly. Ask it who does that kind of work, without naming anyone, and the same business comes up about three times in a hundred. Making the first number good is a content and markup job, and it is achievable. Making the second number good is a fame problem, and no markup solves it.</figcaption>
+  </figure>
+
+  <h3><span class="n">5.4</span>What makes a business get mentioned</h3>
+
+  <p class="col">Since discovery is the bottleneck, this is where the leverage is — and it is not on your own website.</p>
+
+  <figure class="wide">
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">Signal</th><th scope="col">Value</th><th scope="col">What was measured</th><th scope="col">Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Brand mentions ↔ AI visibility</th><td class="num-cell">r = 0.664</td><td>Correlation across 75,000 brands</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Backlinks ↔ AI visibility</th><td class="num-cell">r = 0.218</td><td>Same population, same measure</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Dense unlinked mentions</th><td class="num-cell">3.4×</td><td>Relative likelihood of being surfaced in AI answers</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Earned media</th><td class="num-cell">84%</td><td>Share of all AI citations</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+          <tr><th scope="row">Paid and advertorial</th><td class="num-cell">0.3%</td><td>Share of all AI citations</td><td><a class="cite" href="#r10">[10]</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption><b>Table 6.</b> Mentions against links as predictors of AI visibility. These are correlations from industry data, not controlled experiments, so read them as direction rather than magnitude. <b>In plain terms:</b> being written about matters roughly three times more than being linked to, and the link is a bonus on top of the mention. Note the last row: money spent on placements buys three citations in a thousand. What works is slow — trade press, associations, suppliers, genuine participation — which is precisely why it still works.</figcaption>
+  </figure>
+
+  <h3><span class="n">5.5</span>What decides local visibility</h3>
+
+  <p class="col">For a business that serves an area, the ranking system that decides whether the phone rings is not the one that ranks web pages. It ranks profiles.</p>
+
+  <figure class="wide">
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">Signal group</th><th scope="col">Weight, local pack</th><th scope="col">Who controls it</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Google Business Profile</th><td class="num-cell">~32%</td><td>The owner, directly</td></tr>
+          <tr><th scope="row">On-page signals</th><td class="num-cell">~19%</td><td>Whoever builds the site</td></tr>
+          <tr><th scope="row">Reviews</th><td class="num-cell">16&ndash;20%, rising</td><td>Customers, when asked</td></tr>
+          <tr><th scope="row">Links</th><td class="num-cell">~15%</td><td>Earned</td></tr>
+          <tr><th scope="row">Behavioural</th><td class="num-cell">~8%</td><td>Emergent</td></tr>
+          <tr><th scope="row">Citations and listings</th><td class="num-cell">~7%</td><td>One-time setup, then consistency</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption><b>Table 7.</b> Local pack signal weights, from aggregate industry studies <a class="cite" href="#r9">[9]</a>. Google's own framing is three factors — relevance, distance, prominence. <b>In plain terms:</b> the profile and the reviews together outweigh the entire website. Telling a plumber to fix their heading hierarchy while they have no Google Business Profile is malpractice. One 2026 change is worth knowing on its own: “the business is open at the moment of the search” entered the top five individual factors, so wrong opening hours now cost visibility, not just goodwill.</figcaption>
+  </figure>
+
+  <p class="col" style="margin-top:1.9rem">The weights invert on the AI surfaces. In studies of local queries answered by AI, the profile counts for considerably less, directory citations count about twice as much, and on-page content and links carry nearly double the weight they do in the map pack <a class="cite" href="#r9">[9]</a>. The website work is therefore not wasted — it is what earns the AI-surface visibility while the profile carries the map.</p>
+
+  <h3><span class="n">5.6</span>How much to trust an AI answer about you</h3>
+
+  <p class="col">Rarely measured, and commercially the one that matters most: a confident wrong statement about your prices or your service area does more damage than silence.</p>
+
+  <figure class="wide">
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">What was counted</th><th scope="col">Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Sentences fully supported by their citation</th><td class="num-cell">51.5%</td><td>Across four generative search products</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Citations that were correct</th><td class="num-cell">74.5%</td><td>Same study</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Claims insufficiently supported</th><td class="num-cell">~11%</td><td>Of 98,020 atomic claims classified</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Cited URLs that could not be fetched</th><td class="num-cell">27.1%</td><td>Inaccessible, removed, or non-textual</td><td><a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Day-to-day source overlap</th><td class="num-cell">0.34&ndash;0.42</td><td>Jaccard similarity across four engines over 45 days</td><td><a class="cite" href="#r4">[4]</a></td></tr>
+          <tr><th scope="row">Decisions changed at temperature zero</th><td class="num-cell">9&ndash;28%</td><td>Between identical repeated runs</td><td><a class="cite" href="#r4">[4]</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption><b>Table 8.</b> Fidelity and stability. <b>In plain terms:</b> about half of what a generative answer states is genuinely backed by the source it points at, and a quarter of the links it offers lead nowhere useful. The answers also move: the same question asked on two days returns a third to a half of the same sources. Two consequences follow. Check what assistants say about you, on a schedule, and treat it as a fault to fix. And never present a single screenshot of a good answer as evidence that anything improved.</figcaption>
+  </figure>
+
+  <h3><span class="n">5.7</span>Thresholds worth memorising</h3>
+
+  <p class="col">Fixed numbers, mostly documented by the platforms, that recur in every audit.</p>
+
+  <figure class="wide">
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th scope="col">Threshold</th><th scope="col">Value</th><th scope="col">Note</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Largest Contentful Paint</th><td class="num-cell">≤ 2.5 s</td><td>75th percentile of real users, 28-day window <a class="cite" href="#r12">[12]</a></td></tr>
+          <tr><th scope="row">Interaction to Next Paint</th><td class="num-cell">≤ 200 ms</td><td>The most commonly failed of the three; about 43% of sites miss it <a class="cite" href="#r12">[12]</a></td></tr>
+          <tr><th scope="row">Cumulative Layout Shift</th><td class="num-cell">≤ 0.1</td><td>Only around 48% of mobile sites pass all three <a class="cite" href="#r12">[12]</a></td></tr>
+          <tr><th scope="row">Search Console history</th><td class="num-cell">16 months</td><td>Then it is gone. Export monthly or lose the baseline</td></tr>
+          <tr><th scope="row">Citations drawn from the opening</th><td class="num-cell">~44%</td><td>Share of language-model citations taken from the first 30% of a document <a class="cite" href="#r5">[5]</a></td></tr>
+          <tr><th scope="row">Titles rewritten by Google</th><td class="num-cell">~1 in 3</td><td>Most often when stuffed, boilerplate, or mismatched to the page</td></tr>
+          <tr><th scope="row">Keyword stuffing, measured effect</th><td class="num-cell">17.7% vs 19.3%</td><td>Position-adjusted visibility, stuffed against baseline — it scores <em>below</em> doing nothing <a class="cite" href="#r1">[1]</a></td></tr>
+          <tr><th scope="row">Unedited mass-generated pages</th><td class="num-cell">&minus;50 to &minus;80%</td><td>Traffic losses reported after scaled content abuse enforcement <a class="cite" href="#r7">[7]</a></td></tr>
+          <tr><th scope="row">llms.txt adoption</th><td class="num-cell">~10% of sites</td><td>Not read by Google Search; used by Perplexity; not a ranking file</td></tr>
+          <tr><th scope="row">IndexNow at Bing</th><td class="num-cell">22%</td><td>Share of Bing's clicked URLs arriving via IndexNow submissions. Google does not support it</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption><b>Table 9.</b> Recurring thresholds and reference values. <b>In plain terms:</b> the speed targets are measured on your actual visitors over four weeks, not on your laptop, and responsiveness is the one most sites fail. Two rows are warnings rather than targets: stuffing keywords scores worse than leaving the page alone, and publishing pages in bulk without editing them has cost sites most of their traffic.</figcaption>
+  </figure>
 </section>
 
 <section id="tiers">
@@ -577,11 +773,11 @@ git clone \
 </section>
 
 <section id="method">
-  <h2 class="head"><span class="n">5</span>Method, applied</h2>
+  <h2 class="head"><span class="n">6</span>Method, applied</h2>
 
   <p class="lead col">What the skill does to a page, in the order it does it. The case below is a single-page site for a home renovation company: eight services, one title tag, no domain configured, no structured data worth the name.</p>
 
-  <h3><span class="n">5.1</span>Establishing a baseline</h3>
+  <h3><span class="n">6.1</span>Establishing a baseline</h3>
   <p class="col">The first command is the audit, and its output is the baseline. Nothing is called an improvement later unless these counts moved.</p>
 
   <figure class="wide">
@@ -609,7 +805,7 @@ SITE
     <figcaption><b>Listing 2.</b> Audit output on the untouched site. The script exits non-zero on any error, so the same command serves as a pre-deploy gate.</figcaption>
   </figure>
 
-  <h3><span class="n">5.2</span>One page becomes nine</h3>
+  <h3><span class="n">6.2</span>One page becomes nine</h3>
   <p class="col">The finding that produces growth, and the one no audit tool reports, because the failure is an absence. Eight services on one page means one title, one heading, one topic — and nothing that can rank for any of the eight things people type.</p>
 
   <figure class="wide">
@@ -647,7 +843,7 @@ SITE
     <figcaption><b>Figure 2.</b> Restructuring one page into a hub with eight leaves. Publishing the eight before their content exists would match the scaled content abuse pattern <a class="cite" href="#r7">[7]</a>, so the gate is part of the intervention, not an afterthought.</figcaption>
   </figure>
 
-  <h3><span class="n">5.3</span>Making a passage retrievable</h3>
+  <h3><span class="n">6.3</span>Making a passage retrievable</h3>
   <p class="col">Retrieval works over passages, and the heading states what the passage under it answers. <code>Investment</code> is retrievable for nothing; the question people type is retrievable for exactly itself.</p>
 
   <figure class="wide">
@@ -676,7 +872,7 @@ depends on three things: …<span class="tag">&lt;/p&gt;</span></code></pre>
     <figcaption><b>Figure 3.</b> A heading and its opening passage, before and after. Front-loading matters independently of the surface: around 44% of language-model citations are drawn from the first 30% of a document <a class="cite" href="#r5">[5]</a>.</figcaption>
   </figure>
 
-  <h3><span class="n">5.4</span>Resolving the business as an entity</h3>
+  <h3><span class="n">6.4</span>Resolving the business as an entity</h3>
   <p class="col">One file describing the business, one command, one connected graph with stable identifiers — instead of the disconnected blocks most sites ship.</p>
 
   <figure class="wide">
@@ -718,7 +914,7 @@ depends on three things: …<span class="tag">&lt;/p&gt;</span></code></pre>
 </section>
 
 <section id="contents">
-  <h2 class="head"><span class="n">6</span>Contents of the artifact</h2>
+  <h2 class="head"><span class="n">7</span>Contents of the artifact</h2>
   <p class="lead col">A router that triages the problem, thirteen reference files loaded only when the stage they cover is the one that is broken, and two scripts with no dependencies.</p>
 
   <dl class="manifest">
@@ -743,7 +939,7 @@ depends on three things: …<span class="tag">&lt;/p&gt;</span></code></pre>
 </section>
 
 <section id="limitations">
-  <h2 class="head"><span class="n">7</span>Limitations</h2>
+  <h2 class="head"><span class="n">8</span>Limitations</h2>
 
   <p class="lead col">Stated plainly, because a practitioner told the limits trusts the numbers that are reported.</p>
 
@@ -761,7 +957,7 @@ depends on three things: …<span class="tag">&lt;/p&gt;</span></code></pre>
 </section>
 
 <section id="references">
-  <h2 class="head"><span class="n">8</span>References</h2>
+  <h2 class="head"><span class="n">9</span>References</h2>
   <ol class="refs">
     <li id="r1">Aggarwal, P. et al. <cite>GEO: Generative Engine Optimization.</cite> Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining, 2024.</li>
     <li id="r2">Puerto, H. et al. <cite>C-SEO Bench: Does Conversational SEO Work?</cite> 2025.</li>
@@ -771,8 +967,13 @@ depends on three things: …<span class="tag">&lt;/p&gt;</span></code></pre>
     <li id="r6">Google Search Central. <cite>AI features and your website.</cite> Search Central documentation.</li>
     <li id="r7">Google Search Central. <cite>Spam policies for Google web search</cite> and <cite>Creating helpful, reliable, people-first content.</cite></li>
     <li id="r8">Google Search Central. <cite>Local business (LocalBusiness) structured data.</cite></li>
-    <li id="r9">BrightLocal and aggregate local ranking factor studies, 2026.</li>
+    <li id="r9">BrightLocal and aggregate local ranking factor studies, 2026. Industry aggregates: directional rather than exact.</li>
+    <li id="r10">AI platform citation-source analyses, 2026: the 5W AI Platform Citation Source Index, an analysis of roughly 200 million prompts across five months, and a 680-million-citation comparison of ChatGPT and Perplexity. Industry analyses, not peer-reviewed.</li>
+    <li id="r11">Sharma, 2026. <cite>Recognition versus organic discovery in assistant product queries.</cite> Industry analysis.</li>
+    <li id="r12">Google. <cite>Core Web Vitals thresholds</cite> (web.dev) and the HTTP Archive <cite>Web Almanac</cite>, 2025&ndash;2026 pass-rate data.</li>
   </ol>
+
+  <p class="col" style="margin-top:1.6rem">Where a figure comes from an industry aggregate rather than a controlled study, it is marked as such in the table that carries it. Those numbers are useful for deciding where to spend effort and unsuitable for claiming a causal effect. The distinction is the same one the evidence tiers in Table 2 encode.</p>
 </section>
 
 </main>
