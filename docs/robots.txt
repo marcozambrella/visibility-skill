@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marcozambrella.github.io/visibility-skill/sitemap.xml

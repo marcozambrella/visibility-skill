@@ -1,0 +1,70 @@
+{
+  "_comment": "Input for scripts/structured-data.mjs. Delete the keys that do not apply rather than leaving empty strings — an empty property is worse than an absent one. Every URL may be relative to \"site\"; the script makes it absolute.",
+
+  "site": "https://example.com",
+  "name": "Business Name",
+  "legalName": "Business Name S.r.l.",
+  "type": "HomeAndConstructionBusiness",
+  "description": "One sentence saying what the business does, where, and since when. Reuse this exact sentence on the Google Business Profile and in every directory listing.",
+  "language": "it-IT",
+
+  "logo": "/logo.png",
+  "image": "/hero.jpg",
+
+  "telephone": "+39 06 1234567",
+  "email": "info@example.com",
+  "vatID": "IT01234567890",
+  "foundingDate": "2010",
+  "priceRange": "€€",
+
+  "_comment_address": "For a business customers can visit, fill street and postalCode. For a business that travels to the customer, omit them, set \"hideAddress\": true, and rely on serviceArea.",
+  "address": {
+    "street": "Via Example 12",
+    "city": "Roma",
+    "postalCode": "00100",
+    "region": "RM",
+    "country": "IT"
+  },
+  "hideAddress": false,
+
+  "_comment_geo": "At least five decimal places. Take them from the Google Business Profile pin, not from a city-level lookup.",
+  "geo": {
+    "latitude": 41.90278,
+    "longitude": 12.49637
+  },
+
+  "serviceArea": [
+    "Roma",
+    { "type": "AdministrativeArea", "name": "Città metropolitana di Roma Capitale" }
+  ],
+
+  "openingHours": [
+    {
+      "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "08:00",
+      "closes": "18:00"
+    },
+    {
+      "days": ["Saturday"],
+      "opens": "08:00",
+      "closes": "13:00"
+    }
+  ],
+
+  "_comment_sameAs": "Google Business Profile URL first, then social accounts and directory listings you control. This is what tells a machine that all these accounts are the same entity. Leave the array empty until the profiles actually exist.",
+  "sameAs": [],
+
+  "knowsAbout": [
+    "Topic of competence one",
+    "Topic of competence two"
+  ],
+
+  "servicesLabel": "Servizi",
+  "services": [
+    {
+      "name": "Service name as a customer would say it",
+      "description": "One sentence.",
+      "url": "/servizi/service-slug/"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+# robots.txt — annotated template.
+#
+# Two decisions live in this file and they are commonly confused:
+#
+#   1. Should search engines index the site?          Almost always yes.
+#   2. Should AI companies train on the content?      A business decision.
+#
+# The trap: for each AI company there are TWO kinds of crawler. The training
+# crawler builds the model. The retrieval agent fetches pages to answer a user's
+# question right now, and that is where citations and referral traffic come from.
+# Blocking GPTBot costs nothing in ChatGPT search visibility. Blocking
+# OAI-SearchBot removes you from ChatGPT search entirely. People get this
+# backwards constantly.
+#
+# The default below: allow everything that answers user questions, allow the
+# training crawlers too. If you want out of model training, uncomment the
+# training block at the bottom.
+
+# ---------------------------------------------------------------------------
+# Search engines. Do not block these.
+# ---------------------------------------------------------------------------
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# ---------------------------------------------------------------------------
+# AI retrieval agents. These fetch pages to answer a question a user just asked.
+# Blocking any of them removes you from that assistant's answers.
+# ---------------------------------------------------------------------------
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# ---------------------------------------------------------------------------
+# Everything else.
+# ---------------------------------------------------------------------------
+
+User-agent: *
+Allow: /
+
+# Do not block CSS or JavaScript. Google renders the page; blocking assets makes
+# it render broken, and it judges what it rendered.
+
+# Block only what genuinely should not be indexed. Keep this list short.
+# Disallow: /admin/
+# Disallow: /cart/
+# Disallow: /*?sort=
+# Disallow: /ricerca?
+
+# ---------------------------------------------------------------------------
+# Model training. Uncomment to opt out. This has no effect on Google Search
+# ranking, on ChatGPT search results, or on Perplexity citations.
+# ---------------------------------------------------------------------------
+
+# User-agent: GPTBot
+# Disallow: /
+#
+# User-agent: ClaudeBot
+# Disallow: /
+#
+# User-agent: Google-Extended
+# Disallow: /
+#
+# User-agent: Applebot-Extended
+# Disallow: /
+#
+# User-agent: CCBot
+# Disallow: /
+
+# ---------------------------------------------------------------------------
+# Absolute URL, always. This is how crawlers find the sitemap without guessing.
+# ---------------------------------------------------------------------------
+
+Sitemap: https://example.com/sitemap-index.xml
+
+# Note: some crawlers ignore this file entirely. Bytespider and certain
+# Perplexity fetches have been documented doing so. For non-compliant agents the
+# only real control is at the server or WAF level.

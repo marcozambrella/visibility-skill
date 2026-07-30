@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>visibility — an agent skill for getting found</title>
+<meta name="description" content="An open-source agent skill for search visibility across Google, the local pack, AI Overviews and assistants. Every recommendation carries an evidence tier.">
+<link rel="canonical" href="https://marcozambrella.github.io/visibility-skill/">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="visibility — an agent skill for getting found">
+<meta property="og:description" content="Search visibility across Google, the local pack, AI Overviews and assistants. Every recommendation carries an evidence tier.">
+<meta property="og:url" content="https://marcozambrella.github.io/visibility-skill/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_GB">
+
+<style>
+/* ── Palette ────────────────────────────────────────────────────────────
+   Dark only, by decision, not by reflex: this page is read at a desk by
+   someone evaluating a tool, next to a terminal that is already dark.
+   Strategy: committed. A near-black petrol carries the opening band, the
+   body sits one step lighter in the same hue, and brass is the single
+   hardware colour. Reference: a brass surveying instrument in a dim
+   workshop — precision hardware, warm metal, one lamp.
+
+   Contrast against --bg: ink 12.9:1, muted 6.7:1, brass-txt 8.8:1.
+   ──────────────────────────────────────────────────────────────────── */
+:root {
+  --bg:        oklch(0.168 0.008 220);
+  --surface:   oklch(0.222 0.011 220);
+  --ink:       oklch(0.945 0.006 78);
+  --muted:     oklch(0.705 0.009 78);
+  --rule:      oklch(0.315 0.011 220);
+  --brass:     oklch(0.775 0.132 80);
+  --brass-txt: oklch(0.795 0.130 80);
+  --petrol:    oklch(0.128 0.021 220);
+  --on-petrol: oklch(0.955 0.006 78);
+  --on-petrol-dim: oklch(0.735 0.012 78);
+
+  --sans: system-ui, -apple-system, "Segoe UI Variable Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", "Menlo", "Consolas", monospace;
+
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --measure: 68ch;
+
+  --out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Structure ─────────────────────────────────────────────────────── */
+
+.wrap {
+  max-width: 78rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Constrains the content, not the wrapper: every section keeps the same
+   left edge as the rest of the page. */
+.narrow > * { max-width: var(--measure); }
+
+section { padding-block: clamp(3.5rem, 8vw, 7rem); }
+section + section { border-top: 1px solid var(--rule); }
+
+/* ── Type ──────────────────────────────────────────────────────────── */
+
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p, li { text-wrap: pretty; }
+
+h1 {
+  font-size: clamp(2.5rem, 1.5rem + 4.6vw, 4.75rem);
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 1.15rem + 2.6vw, 2.75rem);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  margin-bottom: 1.25rem;
+}
+
+h3 {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.008em;
+  margin: 0 0 0.35rem;
+}
+
+.lede {
+  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.4375rem);
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 46ch;
+}
+
+.dek {
+  color: var(--muted);
+  max-width: var(--measure);
+  margin-block: 0 2.5rem;
+}
+
+a { color: var(--brass-txt); text-underline-offset: 0.18em; text-decoration-thickness: from-font; }
+a:hover { color: var(--ink); }
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+code, kbd, samp, pre { font-family: var(--mono); }
+
+/* ── Hero: the one drenched surface ────────────────────────────────── */
+
+.hero {
+  background: var(--petrol);
+  color: var(--on-petrol);
+  padding-block: clamp(3.5rem, 9vw, 8rem) clamp(3rem, 7vw, 6rem);
+  border-top: none;
+}
+
+.hero .wrap {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 62rem) {
+  .hero .wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: end; }
+}
+
+.hero h1 { color: var(--on-petrol); }
+.hero h1 .mark { color: var(--brass); }
+
+.hero .lede { color: var(--on-petrol-dim); margin-top: 1.5rem; }
+
+.surfaces {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+}
+.surfaces li {
+  border: 1px solid color-mix(in oklch, var(--on-petrol) 26%, transparent);
+  padding: 0.28rem 0.6rem;
+  color: var(--on-petrol-dim);
+}
+
+.install { min-width: 0; }
+
+.install-label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--on-petrol-dim);
+  margin: 0 0 0.6rem;
+}
+
+pre {
+  margin: 0;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.hero pre {
+  background: color-mix(in oklch, var(--on-petrol) 8%, transparent);
+  border: 1px solid color-mix(in oklch, var(--on-petrol) 20%, transparent);
+  color: var(--on-petrol);
+}
+.hero pre .cmt { color: var(--on-petrol-dim); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.7rem 1.15rem;
+  text-decoration: none;
+  transition: background-color 180ms var(--out), color 180ms var(--out), border-color 180ms var(--out);
+}
+/* Dark ink on the brass fill, not white: brass sits at L 0.775, so white
+   text would land at 1.4:1. Dark ink gives 8.4:1. */
+.btn-primary {
+  background: var(--brass);
+  color: oklch(0.16 0.02 78);
+  border: 1px solid var(--brass);
+}
+.btn-primary:hover { background: var(--on-petrol); border-color: var(--on-petrol); color: var(--petrol); }
+.btn-ghost {
+  border: 1px solid color-mix(in oklch, var(--on-petrol) 32%, transparent);
+  color: var(--on-petrol);
+}
+.btn-ghost:hover { background: color-mix(in oklch, var(--on-petrol) 12%, transparent); color: var(--on-petrol); }
+
+/* ── The correction ────────────────────────────────────────────────── */
+
+.claims { margin: 0; padding: 0; }
+
+.claim {
+  display: grid;
+  gap: 0.25rem 1.75rem;
+  padding-block: 1.6rem;
+  border-top: 1px solid var(--rule);
+}
+.claim:last-of-type { border-bottom: 1px solid var(--rule); }
+
+@media (min-width: 48rem) {
+  .claim { grid-template-columns: 9.5rem minmax(0, 1fr); align-items: baseline; }
+}
+
+.claim dt {
+  font-family: var(--mono);
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--brass-txt);
+  line-height: 1.1;
+}
+.claim dd { margin: 0; max-width: 56ch; }
+.claim dd strong { font-weight: 650; }
+.claim .src {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.pull {
+  margin: 2.75rem 0 0;
+  padding-left: clamp(1rem, 3vw, 1.75rem);
+  border-left: 1px solid var(--brass);
+  font-size: clamp(1.125rem, 1rem + 0.55vw, 1.375rem);
+  line-height: 1.45;
+  max-width: 40ch;
+}
+.pull cite { display: block; margin-top: 0.75rem; font-size: 0.8125rem; font-style: normal; color: var(--muted); font-family: var(--mono); }
+
+/* ── Funnel figure ─────────────────────────────────────────────────── */
+
+figure { margin: 0; }
+
+/* One hue, three strengths. Opacity rather than a second colour, so the
+   ramp reads as "the same thing, weaker" in both themes. */
+.funnel-svg { display: block; width: 100%; height: auto; }
+.funnel-svg .band-controlled { fill: var(--brass); }
+.funnel-svg .band-shared { fill: var(--brass); opacity: 0.42; }
+.funnel-svg .band-out { fill: var(--ink); opacity: 0.16; }
+.funnel-svg .num { fill: var(--bg); font-family: var(--mono); font-size: 15px; font-weight: 600; }
+.funnel-svg .num-shared { fill: var(--ink); font-family: var(--mono); font-size: 15px; font-weight: 600; }
+.funnel-svg .num-out { fill: var(--muted); font-family: var(--mono); font-size: 13px; font-weight: 600; }
+.funnel-svg .axis { fill: var(--muted); font-family: var(--mono); font-size: 12px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .funnel-svg .band { transform: scaleY(0.12); transform-origin: 50% 60px; animation: rise 700ms var(--out) forwards; }
+  .funnel-svg .band:nth-child(2) { animation-delay: 60ms; }
+  .funnel-svg .band:nth-child(3) { animation-delay: 120ms; }
+  .funnel-svg .band:nth-child(4) { animation-delay: 180ms; }
+  .funnel-svg .band:nth-child(5) { animation-delay: 240ms; }
+  .funnel-svg .band:nth-child(6) { animation-delay: 300ms; }
+  .funnel-svg .band:nth-child(7) { animation-delay: 360ms; }
+  @keyframes rise { to { transform: scaleY(1); } }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.legend li { display: flex; align-items: center; gap: 0.5rem; }
+.legend .sw { width: 1.5rem; height: 0.5rem; flex: none; }
+.legend .sw-controlled { background: var(--brass); }
+.legend .sw-shared { background: var(--brass); opacity: 0.42; }
+.legend .sw-out { background: var(--ink); opacity: 0.16; }
+
+.stages { counter-reset: stage; list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 0; }
+@media (min-width: 55rem) { .stages { grid-template-columns: 1fr 1fr; column-gap: 3.5rem; } }
+
+.stages li {
+  counter-increment: stage;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0 0.75rem;
+  padding-block: 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+.stages li::before {
+  content: counter(stage);
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brass-txt);
+  padding-top: 0.15rem;
+}
+.stages p { margin: 0.15rem 0 0; color: var(--muted); font-size: 0.9375rem; }
+
+/* ── Tier table ────────────────────────────────────────────────────── */
+
+.scroller { overflow-x: auto; margin-top: 2rem; }
+
+table { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 0.9375rem; }
+caption { text-align: left; color: var(--muted); font-size: 0.875rem; padding-bottom: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 0.85rem 1.25rem 0.85rem 0; border-top: 1px solid var(--rule); }
+thead th { border-top: none; border-bottom: 1px solid var(--ink); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding-bottom: 0.6rem; }
+tbody th { font-family: var(--mono); font-weight: 600; white-space: nowrap; padding-right: 2rem; }
+td:last-child, th:last-child { padding-right: 0; }
+.t-confirmed { color: var(--brass-txt); }
+.t-refuse { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+
+/* ── Contents ──────────────────────────────────────────────────────── */
+
+.files { margin: 0; padding: 0; }
+.files > div { display: grid; gap: 0.15rem 1.5rem; padding-block: 0.95rem; border-top: 1px solid var(--rule); }
+@media (min-width: 42rem) {
+  .files > div { grid-template-columns: 13.5rem minmax(0, 1fr); align-items: baseline; }
+}
+.files dt { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink); }
+.files dd { margin: 0; color: var(--muted); font-size: 0.9375rem; max-width: 58ch; }
+
+/* ── Terminal sample ───────────────────────────────────────────────── */
+
+.term {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  margin-top: 1.75rem;
+  max-width: 56ch;
+}
+.term .sev-err { color: var(--brass-txt); font-weight: 600; }
+.term .sev-warn { color: var(--muted); }
+.term .dim { color: var(--muted); }
+
+/* ── Won't do ──────────────────────────────────────────────────────── */
+
+.wont { display: grid; gap: 2rem clamp(2rem, 5vw, 4.5rem); margin-top: 2rem; }
+@media (min-width: 52rem) { .wont { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.wont p { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+
+/* ── Footer ────────────────────────────────────────────────────────── */
+
+footer {
+  border-top: 1px solid var(--rule);
+  padding-block: 2.5rem 3.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+footer .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; align-items: baseline; }
+footer ul { display: flex; flex-wrap: wrap; gap: 1.25rem; list-style: none; margin: 0; padding: 0; }
+
+/* ── Reduced motion ────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Getting found is a&nbsp;pipeline,<br><span class="mark">not a checklist.</span></h1>
+      <p class="lede">An open-source agent skill for search visibility. Every recommendation carries an evidence tier, so you can tell what is documented from what is merely repeated.</p>
+      <ul class="surfaces">
+        <li>Google organic</li>
+        <li>Local pack &amp; Maps</li>
+        <li>AI Overviews</li>
+        <li>AI Mode</li>
+        <li>ChatGPT</li>
+        <li>Perplexity</li>
+        <li>Claude</li>
+        <li>Gemini</li>
+      </ul>
+    </div>
+
+    <div class="install">
+      <p class="install-label">Install</p>
+<pre><code><span class="cmt"># Claude Code, or any runtime reading SKILL.md</span>
+git clone \
+  https://github.com/marcozambrella/visibility-skill.git \
+  ~/.claude/skills/visibility
+
+<span class="cmt"># then</span>
+/visibility</code></pre>
+      <div class="actions">
+        <a class="btn btn-primary" href="https://github.com/marcozambrella/visibility-skill">Repository</a>
+        <a class="btn btn-ghost" href="https://github.com/marcozambrella/visibility-skill/blob/main/reference/06-ai-search.md">Read the AI-search chapter</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="correction">
+  <div class="wrap">
+    <h2>Most of what you have read about AI search was measured wrong</h2>
+    <p class="dek">Not by a little. The headline results everyone quotes come from experiments where the page was already inside the model's context window. They measure how a model picks between sources it has already retrieved. They say nothing about getting retrieved.</p>
+
+    <dl class="claims">
+      <div class="claim">
+        <dt>+41%</dt>
+        <dd>The famous gain from adding quotations, from the foundational GEO paper. <strong>Measured on documents already placed in a five-document context.</strong> The paper does not establish organic discoverability, and does not measure traffic.
+        <span class="src">Aggarwal et al., KDD 2024</span></dd>
+      </div>
+      <div class="claim">
+        <dt>3 / 54</dt>
+        <dd>Method-and-domain combinations that were significantly positive when the published GEO techniques were independently benchmarked. <strong>None in question answering.</strong> Under broad adoption the gains approach zero, because one source's gain is another's loss.
+        <span class="src">C-SEO Bench, Puerto et al. 2025</span></dd>
+      </div>
+      <div class="claim">
+        <dt>&minus;9%</dt>
+        <dd>What happened to top-20 presence in the one study that measured the whole pipeline instead of a fixed context. <strong>Optimizing the body text made things worse</strong>, because rewriting for quotability degrades the topical signals that get a page retrieved at all.
+        <span class="src">SAGEO Arena, Kim et al. 2026</span></dd>
+      </div>
+      <div class="claim">
+        <dt>0.34</dt>
+        <dd>Day-to-day source overlap across four engines over 45 days, at the low end. Repeated runs at temperature zero changed 9&ndash;28% of decisions. <strong>A single before-and-after screenshot proves nothing.</strong>
+        <span class="src">Schulte et al. 2026; Kirsten et al. 2026</span></dd>
+      </div>
+    </dl>
+
+    <blockquote class="pull">
+      <p>There are no additional requirements to appear in AI Overviews or AI Mode, nor other special optimizations necessary.</p>
+      <cite>Google Search Central, AI features documentation</cite>
+    </blockquote>
+  </div>
+</section>
+
+<section id="funnel">
+  <div class="wrap">
+    <h2>Seven stages, and you only control the first three</h2>
+    <p class="dek">A page has to be reachable, then indexed, then retrieved, then selected, then quoted. A failure at any stage makes every later optimization worthless. Almost all published advice acts on stage five.</p>
+
+    <figure>
+      <svg class="funnel-svg" viewBox="0 0 960 150" role="img" aria-labelledby="funnel-title funnel-desc" preserveAspectRatio="xMidYMid meet">
+        <title id="funnel-title">Attrition across the seven stages of search visibility</title>
+        <desc id="funnel-desc">A horizontal bar chart narrowing from left to right. The first three stages, drawn in brass, are the ones a site owner directly controls: activation, crawling and indexing, and retrieval. Stages four and five, reranking and citation, are only partly influenced. Stages six and seven, absorption and behaviour, are outside direct control.</desc>
+
+        <g>
+          <rect class="band band-controlled" x="0"   y="10" width="136" height="100"/>
+          <rect class="band band-controlled" x="138" y="18" width="136" height="84"/>
+          <rect class="band band-controlled" x="276" y="27" width="136" height="66"/>
+          <rect class="band band-shared"     x="414" y="35" width="136" height="50"/>
+          <rect class="band band-shared"     x="552" y="42" width="136" height="36"/>
+          <rect class="band band-out"        x="690" y="48" width="136" height="24"/>
+          <rect class="band band-out"        x="828" y="53" width="132" height="14"/>
+        </g>
+
+        <text class="num" x="20"  y="68">1</text>
+        <text class="num" x="158" y="68">2</text>
+        <text class="num" x="296" y="68">3</text>
+        <text class="num-shared" x="434" y="68">4</text>
+        <text class="num-shared" x="572" y="68">5</text>
+        <text class="num-out" x="690" y="38">6</text>
+        <text class="num-out" x="828" y="38">7</text>
+
+        <text class="axis" x="0"   y="140">query</text>
+        <text class="axis" x="884" y="140">revenue</text>
+      </svg>
+      <ul class="legend">
+        <li><span class="sw sw-controlled" aria-hidden="true"></span>You control this</li>
+        <li><span class="sw sw-shared" aria-hidden="true"></span>You influence it indirectly</li>
+        <li><span class="sw sw-out" aria-hidden="true"></span>Outside your control</li>
+      </ul>
+    </figure>
+
+    <ol class="stages">
+      <li><div><h3>Activation</h3><p>Does the system search at all? AI Overviews fire on about 13.7% of queries overall, but 64.7% of queries phrased as questions.</p></div></li>
+      <li><div><h3>Crawling and indexing</h3><p>Fetched, rendered, stored. Blocked in robots, client-rendered, or canonicalised away: all terminal.</p></div></li>
+      <li><div><h3>Retrieval</h3><p>In the candidate set for this query. Most of the leverage lives here, and most advice ignores it.</p></div></li>
+      <li><div><h3>Reranking</h3><p>Which candidates reach the top slots or the context window. Position beats almost any rewrite.</p></div></li>
+      <li><div><h3>Citation</h3><p>Does the answer use your page, and name you? The only stage the popular literature measures.</p></div></li>
+      <li><div><h3>Fidelity</h3><p>Is what it says about you correct? Only about half of generated sentences are fully supported by their citations.</p></div></li>
+      <li><div><h3>Behaviour</h3><p>Did anyone act? One suggestive quasi-experiment links AI citation to traffic, and its placebo test was not significant.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="tiers">
+  <div class="wrap">
+    <h2>Every claim carries a tier</h2>
+    <p class="dek">This is the discipline the skill enforces on itself and on the agent using it. A recommendation without a tier is an opinion with confidence added.</p>
+
+    <div class="scroller">
+      <table>
+        <caption>Applied throughout the reference material. The bottom two rows exist so an agent can refuse a request and give a mechanism rather than a verdict.</caption>
+        <thead>
+          <tr><th scope="col">Tier</th><th scope="col">What it means</th><th scope="col">How to treat it</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="t-confirmed">Confirmed</th>
+            <td>Documented by the platform owner, or replicated end to end with measured outcomes.</td>
+            <td>Do it. Non-negotiable.</td>
+          </tr>
+          <tr>
+            <th scope="row">Supported</th>
+            <td>Consistent across independent studies, but correlational or conditional on other stages.</td>
+            <td>Do it, and state the condition.</td>
+          </tr>
+          <tr>
+            <th scope="row">Plausible</th>
+            <td>Mechanistically sensible, cheap, no direct evidence either way.</td>
+            <td>Only if it costs almost nothing. Never bill it as a driver.</td>
+          </tr>
+          <tr>
+            <th scope="row" class="t-refuse">Unsupported</th>
+            <td>Widely repeated, no evidence, or evidence against.</td>
+            <td>Say so out loud. Do not do it.</td>
+          </tr>
+          <tr>
+            <th scope="row" class="t-refuse">Harmful</th>
+            <td>Measured negative effect, or a named policy violation.</td>
+            <td>Refuse, and explain the mechanism of harm.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="contents">
+  <div class="wrap">
+    <h2>What is in the box</h2>
+    <p class="dek">A router that triages the problem, thirteen reference files loaded only when the stage they cover is the one that is broken, and two scripts with no dependencies.</p>
+
+    <dl class="files">
+      <div><dt>SKILL.md</dt><dd>The router. Three entry modes — diagnose, build, maintain — and the rules the agent works under.</dd></div>
+      <div><dt>00-model.md</dt><dd>Four surfaces, the seven-stage funnel, where the leverage actually is.</dd></div>
+      <div><dt>01-diagnose.md</dt><dd>Crawl, index, render, canonical, and the AI crawler table that people read backwards.</dd></div>
+      <div><dt>02-keywords.md</dt><dd>Demand research, intent labelling, clustering, page mapping, query fan-out coverage.</dd></div>
+      <div><dt>03-architecture.md</dt><dd>URLs, hub and spoke, internal linking, consolidation, when a location page becomes a doorway page.</dd></div>
+      <div><dt>04-content.md</dt><dd>Titles, extractable passages, information gain, and E-E-A-T as page facts rather than markup.</dd></div>
+      <div><dt>05-structured-data.md</dt><dd>Which types still produce a rich result, which were removed, and the graph pattern with stable identifiers.</dd></div>
+      <div><dt>06-ai-search.md</dt><dd>The evidence, the replication failures, Google's own position, and an honest verdict on llms.txt.</dd></div>
+      <div><dt>07-local.md</dt><dd>Business Profile, NAP, citations, reviews, service areas, and the order of work that actually pays.</dd></div>
+      <div><dt>08-performance.md</dt><dd>LCP, INP and CLS: the sub-parts, the real causes, and per-stack fixes.</dd></div>
+      <div><dt>09-authority.md</dt><dd>Links, digital PR, unlinked mentions, entity building, and a realistic timeline.</dd></div>
+      <div><dt>10-measurement.md</dt><dd>Search Console, GA4, AI referral blind spots, prompt panels, experiment design.</dd></div>
+      <div><dt>11-human-playbook.md</dt><dd>The work an agent cannot do, written for the business owner, with a weekly and monthly cadence.</dd></div>
+      <div><dt>12-antipatterns.md</dt><dd>Penalised tactics, wasted-money tactics, agent-specific failure modes, and a refusal script.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="scripts">
+  <div class="wrap narrow">
+    <h2>Two scripts, no dependencies</h2>
+    <p class="dek"><code>audit-page.mjs</code> reads built HTML or a live URL and reports what is machine-checkable, ranked by severity. It exits non-zero on any error, so it works as a deploy gate. <code>structured-data.mjs</code> builds one connected JSON-LD graph from a business file and refuses the markup patterns that trigger manual actions.</p>
+
+<pre class="term"><code><span class="dim">$</span> node scripts/audit-page.mjs ./dist
+
+<span class="dim">────────────────────────────────────────────────</span>
+VISIBILITY AUDIT — 1 page
+<span class="dim">────────────────────────────────────────────────</span>
+
+SITE
+
+  <span class="sev-warn">WARN</span>   No robots.txt in the build output
+  <span class="sev-warn">WARN</span>   No sitemap XML in the build output
+
+/
+  <span class="dim">523 words · 14 headings · 8 images · 0 internal links</span>
+  <span class="sev-err">ERROR</span>  og:image is a relative path
+         /logo.png — messaging apps require an
+         absolute URL and will show no preview.
+  <span class="sev-warn">WARN</span>   No canonical link
+  <span class="sev-warn">WARN</span>   JSON-LD "image" is a relative path
+
+<span class="dim">────────────────────────────────────────────────</span>
+1 error, 8 warning, 0 info
+<span class="dim">────────────────────────────────────────────────</span></code></pre>
+  </div>
+</section>
+
+<section id="wont">
+  <div class="wrap">
+    <h2>What it will not do</h2>
+    <div class="wont">
+      <div>
+        <h3>Promise rankings</h3>
+        <p>Nobody controls them. It promises the fixes, the measurement, and the cadence, and it states the realistic timeline: long tail in months two to three, competitive terms in months three to six.</p>
+      </div>
+      <div>
+        <h3>Write copy for a real business</h3>
+        <p>You do not know their prices, guarantees, or service radius. It builds the structure, marks the gaps with visible placeholders, and produces a brief telling the owner exactly what to write.</p>
+      </div>
+      <div>
+        <h3>Claim an unmeasured win</h3>
+        <p>Run the audit before, run it after, state the delta. "This should improve rankings" is banned in the skill's own rules for the agent using it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>MIT licensed. Corrections with a source attached are welcome as issues.</p>
+    <ul>
+      <li><a href="https://github.com/marcozambrella/visibility-skill">GitHub</a></li>
+      <li><a href="https://github.com/marcozambrella/visibility-skill/blob/main/reference/12-antipatterns.md">Antipatterns</a></li>
+      <li><a href="https://github.com/marcozambrella/visibility-skill/blob/main/LICENSE">Licence</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://marcozambrella.github.io/visibility-skill/#skill",
+      "name": "visibility",
+      "description": "An open-source agent skill for search visibility across Google organic, the local pack, AI Overviews and AI Mode, and assistants. Every recommendation carries an evidence tier.",
+      "codeRepository": "https://github.com/marcozambrella/visibility-skill",
+      "programmingLanguage": "JavaScript",
+      "runtimePlatform": "Node.js 22",
+      "license": "https://opensource.org/licenses/MIT",
+      "author": { "@id": "https://marcozambrella.github.io/visibility-skill/#author" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://marcozambrella.github.io/visibility-skill/#author",
+      "name": "Marco Zambrella",
+      "url": "https://github.com/marcozambrella"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://marcozambrella.github.io/visibility-skill/#website",
+      "url": "https://marcozambrella.github.io/visibility-skill/",
+      "name": "visibility",
+      "inLanguage": "en-GB",
+      "about": { "@id": "https://marcozambrella.github.io/visibility-skill/#skill" }
+    }
+  ]
+}
+</script>
+
+</body>
+</html>
