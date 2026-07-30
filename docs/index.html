@@ -42,7 +42,10 @@
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
 
-  --measure: 34rem;
+  /* Misura del testo: ~74 caratteri con le grazie a 17px, dentro la banda
+     leggibile. Le figure riempiono tutta la colonna, che è più larga: lo
+     scalino tra i due è voluto ed è la convenzione dei giornali. */
+  --measure: 41rem;
   --gutter: clamp(1.5rem, 5vw, 3rem);
   --out: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -71,7 +74,7 @@ body {
    ──────────────────────────────────────────────────────────────────── */
 
 .sheet {
-  max-width: 58rem;
+  max-width: 64rem;
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
@@ -218,7 +221,7 @@ figcaption {
   font-size: 0.8125rem;
   line-height: 1.6;
   color: var(--muted);
-  max-width: 46rem;
+  max-width: none;
 }
 figcaption b {
   color: var(--ink);
@@ -226,7 +229,9 @@ figcaption b {
   letter-spacing: 0.01em;
 }
 
-.wide { max-width: 46rem; }
+/* Le figure riempiono la colonna intera, non una larghezza fissa: così non
+   restano scollegate dal bordo destro del testo. */
+.wide { max-width: none; }
 
 /* Figure 1 — the funnel. One hue at three strengths, so the ramp reads as
    the same quantity weakening rather than three unrelated categories. */
@@ -262,7 +267,7 @@ figcaption b {
 .key .k-c { background: var(--ink); opacity: 0.15; }
 
 /* Stage list, set as a numbered definition list rather than cards. */
-.stages { margin: 1.9rem 0 0; padding: 0; list-style: none; counter-reset: stage; max-width: 46rem; }
+.stages { margin: 1.9rem 0 0; padding: 0; list-style: none; counter-reset: stage; }
 .stages li {
   counter-increment: stage;
   display: grid;
@@ -355,14 +360,14 @@ blockquote cite {
 }
 
 /* Manifest */
-.manifest { margin: 1.75rem 0 0; max-width: 46rem; }
+.manifest { margin: 1.75rem 0 0; }
 .manifest > div { display: grid; gap: 0.1rem 1.5rem; padding: 0.62rem 0; border-top: 1px solid var(--hairline); }
 @media (min-width: 42rem) { .manifest > div { grid-template-columns: 13rem minmax(0, 1fr); align-items: baseline; } }
 .manifest dt { font-family: var(--mono); font-size: 0.78125rem; color: var(--ink); }
 .manifest dd { margin: 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.6; }
 
 /* References */
-.refs { margin: 1.6rem 0 0; padding: 0; list-style: none; counter-reset: ref; max-width: 46rem; }
+.refs { margin: 1.6rem 0 0; padding: 0; list-style: none; counter-reset: ref; }
 .refs li {
   counter-increment: ref;
   display: grid; grid-template-columns: 2.1rem minmax(0, 1fr); gap: 0 0.6rem;
@@ -391,7 +396,7 @@ footer {
   padding-block: 1.75rem 3.5rem;
   font-family: var(--sans); font-size: 0.8125rem; color: var(--faint);
 }
-footer p { max-width: 46rem; margin-bottom: 0.6rem; }
+footer p { max-width: var(--measure); margin-bottom: 0.6rem; }
 footer ul { display: flex; flex-wrap: wrap; gap: 1.25rem; list-style: none; margin: 0.9rem 0 0; padding: 0; }
 
 @media (prefers-reduced-motion: reduce) {
